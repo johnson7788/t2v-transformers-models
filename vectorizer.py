@@ -74,6 +74,7 @@ class Vectorizer:
         return self.model_delegate.pool_embedding(batch_results, tokens, config)
 
     def _vectorize(self, text: str, config: VectorInputConfig):
+        print("vectorizing text: " + text)
         with torch.no_grad():
             if self.direct_tokenize:
                 # create embeddings without tokenizing text
