@@ -82,7 +82,15 @@ class Vectorizer:
                 "official _ promotion": "官方宣传信息", # 官方宣传信息
                 "customer _ feeling": "顾客感受", # 顾客感受
                 "rating": "评分", # 评分
-            }
+            },
+            "product name 0811": { #如果text开头是product 0811，这个代表的表名
+                "product _ name": "商品名称", # 商品名称
+                "nickname": "商品别名", # 商品别名
+            },
+            "category name 0811": { #如果text开头是product 0811，这个代表的表名
+                "category": "类别", # 商品名称
+                "parent_category": "父类", # 商品别名
+            },
         }
         for table_name, table_info in table_infos.items():
             text = text.strip()
