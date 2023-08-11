@@ -60,7 +60,42 @@ class Vectorizer:
         self.executor = ThreadPoolExecutor()
 
         nltk.data.path.append('./nltk_data')
-
+    def vector_text_replace(self,text:str):
+        """
+        对原始嵌入文本进行替换
+        :param text:
+        :type text:
+        :return:
+        :rtype:
+        """
+        table_infos = {
+            "product 0811": { #如果text开头是product 0811，这个代表的表名
+                "product _ name": "商品名称", # 商品名称
+                "nickname": "商品别名", # 商品别名
+                "category": "类别",  # 类别
+                "brand": "商品品牌", # 品牌
+                "component": "成分", # 成分
+                "effect": "功效", # 功效
+                "price": "价格", # 价格
+                "skin": "适合肤质", #
+                "level": "商品级别", # 功效
+                "official _ promotion": "官方宣传信息", # 官方宣传信息
+                "customer _ feeling": "顾客感受", # 顾客感受
+                "rating": "评分", # 评分
+            }
+        }
+        for table_name, table_info in table_infos.items():
+            text = text.strip()
+            if text.startswith(table_name):
+                # 说明是要进行嵌入的数据，需要进行整理下，替换成对应的字段
+                # 1.首先去掉开头的表名
+                text = text.replace(table_name, "")
+                for key, value in table_info.items():
+                    # 加一个冒号
+                    value = f"{value}:"
+                    text = text.replace(key, value)
+        print(f"对原始嵌入文本进行替换，替换后的文本为：{text}")
+        return text
     def tokenize(self, text:str):
         return self.tokenizer(text, padding=True, truncation=True, max_length=500,
                 add_special_tokens = True, return_tensors="pt")
@@ -77,6 +112,7 @@ class Vectorizer:
     def _vectorize(self, text: str, config: VectorInputConfig):
         current_time = time.strftime("%Y/%m/%d %H:%M:%S",time.localtime())
         print(f"{current_time} -- vectorizing text: " + text)
+        text = self.vector_text_replace(text)
         with torch.no_grad():
             if self.direct_tokenize:
                 # create embeddings without tokenizing text
